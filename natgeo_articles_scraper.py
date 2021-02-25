@@ -52,7 +52,7 @@ for url in article_urls:
 				article_text += article.find_element_by_class_name(
 					"author").text + "\n"
 			except:
-				raise
+				pass
 			output_file.write(article_text + "\n")
 
 output_file.close()
