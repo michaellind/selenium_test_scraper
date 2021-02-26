@@ -7,8 +7,8 @@ PATH = r"C:\Users\Michael\Desktop\chromedriver.exe"
 
 driver = webdriver.Chrome(PATH)
 
-sleep_min = 5
-sleep_max = 15
+sleep_min = 2
+sleep_max = 8
 
 # put a list of links here from natureasia.com/ja-jp/research
 f = open("nature_research_highlights_links.txt")
@@ -32,13 +32,13 @@ for url in urls:
 	j_journal = article.find_element_by_class_name("journal").text
 	j_pub_date = article.find_element_by_class_name("pubdate").text
 	
-	j_article_text += j_title + "\n" + j_journal + "\n" + j_pub_date + "\n"
+	j_article_text += j_title + "\n\n" + j_journal + "\n\n" + j_pub_date + "\n\n"
 	
 	p_elements = article.find_elements_by_tag_name("p")
 	for p_element in p_elements:
 		class_val = p_element.get_attribute("class")
 		if (class_val == ""):
-			j_article_text += p_element.text + "\n"
+			j_article_text += p_element.text + "\n\n"
 	
 	url = url.replace("ja-jp", "en")
 
@@ -53,13 +53,13 @@ for url in urls:
 	e_journal = article.find_element_by_class_name("journal").text
 	e_pub_date = article.find_element_by_class_name("pub-date").text
 	
-	e_article_text += e_title + "\n" + e_journal + "\n" + e_pub_date + "\n"
+	e_article_text += e_title + "\n\n" + e_journal + "\n\n" + e_pub_date + "\n\n"
 	
 	p_elements = article.find_elements_by_tag_name("p")
 	for p_element in p_elements:
 		class_val = p_element.get_attribute("class")
 		if (class_val == ""):
-			e_article_text += p_element.text + "\n"
+			e_article_text += p_element.text + "\n\n"
 	
 	en_output.write(e_article_text + "\n")
 	ja_output.write(j_article_text + "\n")
@@ -73,6 +73,8 @@ for url in urls:
 	file_name = file_name.replace("?", "")
 	file_name = file_name.replace("‘", "'")
 	file_name = file_name.replace("’", "'")
+	file_name = file_name.replace("\"", "'")
+	file_name = file_name.replace("/", "-")
 
 	e_file_name = file_name + " (English).txt"
 	j_file_name = file_name + " (Japanese).txt"
