@@ -19,12 +19,21 @@ en_output = open("researchhighlights_en.txt", "w", encoding="utf-8") # English o
 ja_output = open("researchhighlights_ja.txt", "w", encoding="utf-8") # Japanese only
 ja_en_output = open("researchhighlights_ja_en.txt", "w", encoding="utf-8") # alternating English and Japanese
 
+page_not_found_msg = "ページを表示できません" # "Cannot display page"
+
 for url in urls:
 
 	driver.get(url)
 	time.sleep(randint(sleep_min, sleep_max))
+	try:
+		article = driver.find_element_by_id("content").find_element_by_class_name("main-container")
+	except:
+		if (driver.find_element_by_id("content").find_element_by_class_name("page-header").text == page_not_found_msg):
+			print("Page not found: " + url)
+			continue
+		else:
+			raise
 	
-	article = driver.find_element_by_id("content").find_element_by_class_name("main-container")
 	
 	j_article_text = ""
 	
@@ -73,8 +82,11 @@ for url in urls:
 	file_name = file_name.replace("?", "")
 	file_name = file_name.replace("‘", "'")
 	file_name = file_name.replace("’", "'")
+	file_name = file_name.replace("“", "'") # for some reason I don't like
+	file_name = file_name.replace("”", "'") # curly double quotes in file names
 	file_name = file_name.replace("\"", "'")
 	file_name = file_name.replace("/", "-")
+	file_name = file_name.replace("*", "")
 
 	e_file_name = file_name + " (English).txt"
 	j_file_name = file_name + " (Japanese).txt"
